@@ -1,0 +1,160 @@
+<style type="text/css">
+.thumbnail {
+	min-height: 300px;
+}
+
+#divCartList td {
+    text-align:left;    
+    border-bottom:5px solid gray;
+    border-radius: 15px;
+}
+
+#divCartList th {
+	height: 40px;
+    text-align:center;
+    background:gray;
+    border-bottom:5px solid white;
+    border-radius: 5px;
+}
+#divCartList table {
+    border-bottom:5px solid gray;
+    border-radius: 5px;
+}
+#searchInput{
+	width:30%;
+	margin-left:30px;
+	margin-top:30px;
+}
+</style>
+<h4>Showing Cart <div>
+			<input type="text"  #filter (keyup)="0"  id="searchInput" style="" placeholder="search Product" class="form-control"></div></h4>
+
+<div class='container'>
+		<div class='row' id ='divProductList' [hidden]="!productlist">
+
+			<div [hidden]="!CartItems.length">  
+				<h4>Cart Items {{CartItems.length}} </h4><a class="btn btn-sm btn-success" (click)=showCheckout() ng-transclude=""><span class="ng-scope">Checkout</span></a>
+			</div>	
+			<!-- <div>
+			<input type="number" [(ngModel)]="filterList" (keyup)="navigate($event,filterList)" class="form-control"></div> -->
+			<div style="clear:both;"></div>
+			<br/>
+	  		<br/>
+	  		<div class='col-lg-3 col-sm-3'  *ngFor="#info of information | myfilter:filter.value " >
+				<div class="thumbnail" >
+							<img src="app/img/products/{{info.code}}.jpg" >
+			                <h4 class="ng-binding">{{info.name}}</h4>
+			                <p class="ng-binding">{{info.description}}</p>
+			                <h3 class="price ng-binding"><span>$</span>{{info.price | number:'.2' }}</h3>
+			        		<div>
+				  				<a class="btn btn-sm btn-primary" (click)=addCart(info,1) ng-transclude=""><span class="ng-scope">
+			                    	Add To Cart
+			                		</span></a>
+			                </div>
+
+			  	</div>
+	  		</div>
+	  		<br/>
+	  		<br/>
+	  		<div style="clear:both;"></div>
+	  		<div [hidden]="!CartItems.length">  
+				<h4>Cart Items {{CartItems.length}} </h4><a class="btn btn-sm btn-success" (click)=showCheckout() ng-transclude=""><span class="ng-scope">Checkout</span></a>
+			</div>	
+		
+</div>
+
+	<br/>
+	<br/>
+
+<div class='container'>
+	
+	
+	<div id='divCartList' class='row' [hidden]="!checkout" style='width:600px' >
+		<div> 
+			<a class="btn btn-sm btn-primary" (click)=showProductlist() ng-transclude=""><span class="ng-scope">back to product list</span></a>
+		   	<a class="btn btn-sm btn-danger" (click)=clearCart() ng-transclude=""><span class="ng-scope">clear cart</span></a>
+		</div>
+		<br/>
+	<br/>
+
+	  <h4>Cart {{CartItems.length}} </h4>
+	  <table class="table" >
+			<tr class="ng-binding">
+			  	
+		  		<th> 
+		  		</th>
+		  		<th> Items
+		  		</th>
+		  		<th> Price
+		  		</th>
+		  		<th> Quantity
+		  		</th>
+		  		<th> Value
+		  		</th>
+		  		<th> Action
+		  		</th>
+		    </tr>
+			<tr  *ngFor="#info of CartItems" class="ng-binding">
+				<td><img src="app/img/products/{{info.code}}.jpg" > </td>
+				<td style='width:60%'>
+					{{info.name}}
+					<p class="ng-binding">{{info.description}}</p>
+				</td>
+				<td style='text-aligh:right' >
+						<span>$</span>{{info.price | number:'.2' }}
+				</td>
+				<td> 
+					<input type="number" [(ngModel)]="info.quantity"  class="form-control">
+				</td>
+				<td style='text-aligh:right'>
+						<span>$</span>{{info.price * info.quantity | number:'.2' }}
+				</td>
+				<td style='text-aligh:right'>
+						<!-- <span></span>{{info.price * info.quantity | number:'.2' }} -->
+						<!-- <button type="button" (click)=removeItem(info) >Remove</button> -->
+						<a class="btn btn-sm btn-primary" (click)=RemoveCart(info,1) ng-transclude=""><span class="ng-scope">
+			                    	Remove
+			                		</span></a>
+				</td>
+
+
+			</tr>
+	  
+		  <tr>
+		  	<td> </td>
+		  	<td> 
+		  		<h4 class="ng-binding">Total Order Value</h4>
+		  	</td>
+		  	<td> </td>
+		  	<td>
+		  		<h4 class="price ng-binding">{{orderItemsCount()}}</h4>
+
+		  	 </td>
+		  	<td>
+<h4 class="price ng-binding"><span>$</span>{{orderValue() | number:'.2' }}</h4>
+		  		 </td>
+		  </tr>
+		  
+	  </table>
+	  <br/>
+	<br/>
+
+	  <div > 
+			<a class="btn btn-sm btn-primary" (click)=showProductlist() ng-transclude=""><span class="ng-scope">back to product list</span></a>
+		   	<a class="btn btn-sm btn-danger" (click)=clearCart() ng-transclude=""><span class="ng-scope">clear cart</span></a>
+		   	<a class="btn btn-sm btn-success pull-right" (click)=showConfirmOrder() ng-transclude=""><span class="ng-scope">Place Your Order</span></a>
+		</div>
+	</div>
+
+<div id='divCheckout' class='row' [hidden]="!confirmOrder" style='width:600px' >
+<div>
+	Thank you for your Order! {{orderNo}}
+	 <h4 class="price ng-binding"><span>Order Value:$</span>{{orderValue() | number:'.2' }}</h4>
+	 <a class="btn btn-sm btn-primary" (click)=goProductList() ng-transclude=""><span class="ng-scope">go to product list</span></a>
+</div>
+
+	</div>
+
+
+
+ 
